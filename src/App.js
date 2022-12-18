@@ -1,49 +1,36 @@
 import React from 'react';
+import { useState } from 'react';
 import './App.css';
-class App extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      counter: this.props.counter
-    }
-  }
-  incChange = () => {
-    this.setState(state  => ({
-      counter: this.state.counter - 1
-    }))
+const App = () => {
+  const [counter, setCounter] = useState(0);
+  
+  const incChange = () => {
+    setCounter(counter  => (counter - 1))
   }
 
-  decChange = () => {
-    this.setState(state => ({
-      counter: this.state.counter + 1
-    }))
+  const decChange = () => {
+    setCounter(counter  => (counter + 1))
   }
 
-  randomIntFromInterval = () => { 
-    this.setState(state => ({
-      counter: +Math.floor(Math.random() * (50 - (-50) + 1) + (-50))
-    }))
+  const randomIntFromInterval =() => { 
+    setCounter(+Math.floor(Math.random() * (50 - (-50) + 1) + (-50)));
   }
   
-  resetChange = () => {
-    this.setState(state => ({
-      counter: this.props.counter
-    }))
+  const resetChange = () => {
+    setCounter(0);
   }
 
-  render() {
     return (
       <div className="app">
-        <div className="counter">{this.state.counter}</div>
+        <div className="counter">{counter}</div>
         <div className="controls">
-          <button onClick={this.incChange}>INC</button>
-          <button onClick={this.decChange}>DEC</button>
-          <button onClick={this.randomIntFromInterval}>RND</button>
-          <button onClick={this.resetChange}>RESET</button>
+          <button onClick={incChange}>INC</button>
+          <button onClick={decChange}>DEC</button>
+          <button onClick={randomIntFromInterval}>RND</button>
+          <button onClick={resetChange}>RESET</button>
         </div>
       </div>
     )
-  }
 }
 
 export default App;

@@ -1,36 +1,73 @@
 import React from 'react';
-import { useState } from 'react';
 import './App.css';
-const App = () => {
-  const [counter, setCounter] = useState(0);
+import CourseMoney from './services/CourseMoney';
+
+
+class App extends React.Component {
+    state = {
+      nameValuteAMD: '',
+      valueValuteAMD: '',
+      convertValue: '',
+    }
+
+  courseMoney = new CourseMoney();
+
+  componentDidMount() {
+    this.updateNameValute()
+    this.updateConvert()
+  }
+  updateConvert = () => {
+    this.courseMoney.getValutes()
+    .then(this.onConvert)
+  }
+  updateNameValute = () => {
+    this.courseMoney.getValutes()
+    .then(this.onValute)
+  }
+
+  onValute = ({nameValuteAMD, valueValuteAMD}) => {
+    this.setState({nameValuteAMD, valueValuteAMD})
+  }
+
+  onConvert = (convertValue, valueValuteAMD) => {
+    this.setState(convertValue => {
+      convertValue = 100/valueValuteAMD
+    }) 
+}
   
-  const incChange = () => {
-    setCounter(counter  => (counter - 1))
-  }
+  // const [counter, setCounter] = useState(0);
+  // const {Name} = result;
+  // const incChange = () => {
+  //   setCounter(counter  => (counter - 1))
+  // }
 
-  const decChange = () => {
-    setCounter(counter  => (counter + 1))
-  }
+  // const decChange = () => {
+  //   setCounter(counter  => (counter + 1))
+  // }
 
-  const randomIntFromInterval =() => { 
-    setCounter(+Math.floor(Math.random() * (50 - (-50) + 1) + (-50)));
-  }
+  // const randomIntFromInterval =() => { 
+  //   setCounter(+Math.floor(Math.random() * (50 - (-50) + 1) + (-50)));
+  // }
   
-  const resetChange = () => {
-    setCounter(0);
-  }
-
-    return (
-      <div className="app">
-        <div className="counter">{counter}</div>
-        <div className="controls">
-          <button onClick={incChange}>INC</button>
-          <button onClick={decChange}>DEC</button>
-          <button onClick={randomIntFromInterval}>RND</button>
-          <button onClick={resetChange}>RESET</button>
-        </div>
+  // const resetChange = () => {
+  //   setCounter(0);
+  // }
+render() {
+  const {nameValuteAMD, valueValuteAMD, convertValue} = this.state;
+  return (
+    <div className="app">
+      <div className="convert">{convertValue}</div>
+      <div className="controls">
+        <input type="text" defaultValue=""/>
+        <button onClick={this.onConvert}>{nameValuteAMD}</button>
+        <button onClick={null}>{valueValuteAMD}</button>
+        <button onClick={null}>RND</button>
+        <button onClick={null}>RESET</button>
       </div>
-    )
+    </div>
+  )
+}
+    
 }
 
 export default App;

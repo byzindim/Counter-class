@@ -9,10 +9,13 @@ class CourseMoney {
    }
 
    getValutes = async () => {
-    console.log(res)
         const res = await this.getResource('https://www.cbr-xml-daily.ru/daily_json.js');
+    
         const valuteValue = res.Valute.AMD.Value;
-        return valuteValue;
+        const valuteCode =  res.Valute.AMD.CharCode;
+        return {valuteValue, valuteCode};
+
+        
     }
 
 }

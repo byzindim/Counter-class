@@ -1,73 +1,49 @@
-import React from 'react';
+import React, {useState} from 'react';
+import { useEffect } from 'react';
 import './App.css';
-import CourseMoney from './services/CourseMoney';
+import CourseMoney from './services/CourseMoney'
 
 
-class App extends React.Component {
-    state = {
-      nameValuteAMD: '',
-      valueValuteAMD: '',
-      convertValue: '',
-    }
+const App = () => {
+  const valuteService = new CourseMoney();
+  const [inputValue, setInputValue] = useState();
+  const [textArea, setTextArea] = useState();
+  const [valuteValue, setValuteValue] = useState()
 
-  courseMoney = new CourseMoney();
-
-  componentDidMount() {
-    this.updateNameValute()
-    this.updateConvert()
-  }
-  updateConvert = () => {
-    this.courseMoney.getValutes()
-    .then(this.onConvert)
-  }
-  updateNameValute = () => {
-    this.courseMoney.getValutes()
-    .then(this.onValute)
-  }
-
-  onValute = ({nameValuteAMD, valueValuteAMD}) => {
-    this.setState({nameValuteAMD, valueValuteAMD})
-  }
-
-  onConvert = (convertValue, valueValuteAMD) => {
-    this.setState(convertValue => {
-      convertValue = 100/valueValuteAMD
-    }) 
-}
+  useEffect(() => {
+    onValute()
+  },[])
   
-  // const [counter, setCounter] = useState(0);
-  // const {Name} = result;
-  // const incChange = () => {
-  //   setCounter(counter  => (counter - 1))
-  // }
+  const onInputValue = (e) => {
+    setInputValue(Number(e.target.value)) 
+  }
 
-  // const decChange = () => {
-  //   setCounter(counter  => (counter + 1))
-  // }
+  const convertValute = () => {
+    setTextArea(inputValue/valuteValue) 
+  }
+  const onValute = () => {
+    valuteService
+      .getValutes()
+      .then(onCourse)
+  }
+  const onCourse = (valuteValue) => {
+    setValuteValue(valuteValue)
+  }
 
-  // const randomIntFromInterval =() => { 
-  //   setCounter(+Math.floor(Math.random() * (50 - (-50) + 1) + (-50)));
-  // }
-  
-  // const resetChange = () => {
-  //   setCounter(0);
-  // }
-render() {
-  const {nameValuteAMD, valueValuteAMD, convertValue} = this.state;
   return (
     <div className="app">
-      <div className="convert">{convertValue}</div>
+      <input type="text" onChange={onInputValue}/>
+      <input type="text" value={textArea} />
+      <div className="convert">{null}</div>
       <div className="controls">
-        <input type="text" defaultValue=""/>
-        <button onClick={this.onConvert}>{nameValuteAMD}</button>
-        <button onClick={null}>{valueValuteAMD}</button>
+        <button onClick={convertValute}>INC</button>
+        <button onClick={null}>DEC</button>
         <button onClick={null}>RND</button>
         <button onClick={null}>RESET</button>
       </div>
     </div>
   )
-}
-    
+   
 }
 
 export default App;
